@@ -1,7 +1,7 @@
-package com.example.androidmvptemplate
+package com.example.androidmvptemplate.view.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.androidmvptemplate.R
 import com.example.androidmvptemplate.base.BaseActivity
 
 class MainActivity : BaseActivity() {
