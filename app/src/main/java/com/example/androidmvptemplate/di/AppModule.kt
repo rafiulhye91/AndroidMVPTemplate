@@ -4,9 +4,12 @@ import android.app.Application
 import androidx.room.Room
 import com.example.androidmvptemplate.data.local.AppDatabase
 import com.example.androidmvptemplate.data.local.AppDatabase.Companion.DATABASE_NAME
+import com.example.androidmvptemplate.data.local.DaoServices
 import com.example.androidmvptemplate.data.remote.ApiServices
 import com.example.androidmvptemplate.data.remote.ApiServices.Companion.BASE_URL
 import com.example.androidmvptemplate.data.remote.ApiServices.Companion.TIMEOUT
+import com.example.androidmvptemplate.domain.sample.ISampleDomain
+import com.example.androidmvptemplate.domain.sample.SampleDomain
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,6 +42,12 @@ object AppModule {
     @Singleton
     fun provideDatabase(app: Application): AppDatabase {
         return Room.databaseBuilder(app, AppDatabase::class.java, DATABASE_NAME).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideSampleDomain(apiServices: ApiServices, daoServices: DaoServices): ISampleDomain {
+        return SampleDomain(apiServices, daoServices)
     }
 
 }
