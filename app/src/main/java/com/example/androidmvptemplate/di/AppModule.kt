@@ -10,6 +10,7 @@ import com.example.androidmvptemplate.data.remote.ApiServices.Companion.BASE_URL
 import com.example.androidmvptemplate.data.remote.ApiServices.Companion.TIMEOUT
 import com.example.androidmvptemplate.domain.sample.ISampleDomain
 import com.example.androidmvptemplate.domain.sample.SampleDomain
+import com.example.androidmvptemplate.service.SampleService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,6 +49,12 @@ object AppModule {
     @Singleton
     fun provideSampleDomain(apiServices: ApiServices, daoServices: DaoServices): ISampleDomain {
         return SampleDomain(apiServices, daoServices)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSampleService(domain: ISampleDomain): SampleService {
+        return SampleService(domain)
     }
 
 }
