@@ -2,11 +2,11 @@ package com.example.androidmvptemplate.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.androidmvptemplate.data.domain.local.AppDatabase
-import com.example.androidmvptemplate.data.domain.local.AppDatabase.Companion.DATABASE_NAME
-import com.example.androidmvptemplate.data.domain.remote.ApiServices
-import com.example.androidmvptemplate.data.domain.remote.ApiServices.Companion.BASE_URL
-import com.example.androidmvptemplate.data.domain.remote.ApiServices.Companion.TIMEOUT
+import com.example.androidmvptemplate.data.local.AppDatabase
+import com.example.androidmvptemplate.data.local.AppDatabase.Companion.DATABASE_NAME
+import com.example.androidmvptemplate.data.remote.ApiServices
+import com.example.androidmvptemplate.data.remote.ApiServices.Companion.BASE_URL
+import com.example.androidmvptemplate.data.remote.ApiServices.Companion.TIMEOUT
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

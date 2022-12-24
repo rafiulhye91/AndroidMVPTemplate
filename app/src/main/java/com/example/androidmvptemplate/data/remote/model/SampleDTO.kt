@@ -1,4 +1,4 @@
-package com.example.androidmvptemplate.data.domain.remote.model
+package com.example.androidmvptemplate.data.remote.model
 
 import com.google.gson.annotations.SerializedName
 

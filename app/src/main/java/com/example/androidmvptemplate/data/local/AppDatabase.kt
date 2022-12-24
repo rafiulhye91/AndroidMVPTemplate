@@ -1,8 +1,8 @@
-package com.example.androidmvptemplate.data.domain.local
+package com.example.androidmvptemplate.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.androidmvptemplate.data.domain.local.model.SampleDbData
+import com.example.androidmvptemplate.data.local.model.SampleDbData
 
 @Database(
     entities = [SampleDbData::class],

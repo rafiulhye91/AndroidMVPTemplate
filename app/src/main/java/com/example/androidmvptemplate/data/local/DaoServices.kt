@@ -1,7 +1,7 @@
-package com.example.androidmvptemplate.data.domain.local
+package com.example.androidmvptemplate.data.local
 
 import androidx.room.*
-import com.example.androidmvptemplate.data.domain.local.model.SampleDbData
+import com.example.androidmvptemplate.data.local.model.SampleDbData
 
 @Dao
 interface DaoServices {

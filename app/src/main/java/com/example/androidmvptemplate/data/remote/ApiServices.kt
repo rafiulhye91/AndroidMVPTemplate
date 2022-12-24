@@ -1,6 +1,6 @@
-package com.example.androidmvptemplate.data.domain.remote
+package com.example.androidmvptemplate.data.remote
 
-import com.example.androidmvptemplate.data.domain.remote.model.SampleDTO
+import com.example.androidmvptemplate.data.remote.model.SampleDTO
 import retrofit2.http.GET
 
 interface ApiServices {

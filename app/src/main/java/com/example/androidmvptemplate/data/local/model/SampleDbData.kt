@@ -1,4 +1,4 @@
-package com.example.androidmvptemplate.data.domain.local.model
+package com.example.androidmvptemplate.data.local.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
