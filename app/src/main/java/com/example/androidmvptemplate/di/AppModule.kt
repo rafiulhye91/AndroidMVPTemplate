@@ -1,5 +1,6 @@
 package com.example.androidmvptemplate.di
 
+import android.app.Activity
 import android.app.Application
 import androidx.room.Room
 import com.example.androidmvptemplate.data.local.AppDatabase
@@ -11,9 +12,11 @@ import com.example.androidmvptemplate.data.remote.ApiServices.Companion.TIMEOUT
 import com.example.androidmvptemplate.domain.sample.ISampleDomain
 import com.example.androidmvptemplate.domain.sample.SampleDomain
 import com.example.androidmvptemplate.service.SampleService
+import com.example.androidmvptemplate.view.main.IMainView
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -47,6 +50,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideDaoServices(database: AppDatabase): DaoServices {
+        return database.getDaoServices()
+    }
+
+    @Provides
+    @Singleton
     fun provideSampleDomain(apiServices: ApiServices, daoServices: DaoServices): ISampleDomain {
         return SampleDomain(apiServices, daoServices)
     }
@@ -56,5 +65,14 @@ object AppModule {
     fun provideSampleService(domain: ISampleDomain): SampleService {
         return SampleService(domain)
     }
+}
 
+@InstallIn(ActivityComponent::class)
+@Module
+object ViewModule {
+
+    @Provides
+    fun provideIMainView(activity: Activity): IMainView {
+        return activity as IMainView
+    }
 }

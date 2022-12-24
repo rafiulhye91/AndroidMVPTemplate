@@ -5,7 +5,7 @@ import retrofit2.http.GET
 
 interface ApiServices {
     companion object {
-        const val BASE_URL = "sample.url.com"
+        const val BASE_URL = "https://sample.url.com"
         const val TIMEOUT: Long = 5
     }
 
