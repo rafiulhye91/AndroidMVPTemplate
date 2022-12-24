@@ -1,4 +1,5 @@
 package com.example.androidmvptemplate.base
 
-interface IBaseView {
-}
+import androidx.lifecycle.LifecycleOwner
+
+interface IBaseView : LifecycleOwner
