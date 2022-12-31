@@ -6,7 +6,7 @@ import com.example.androidmvptemplate.data.local.model.SampleDbData
 @Dao
 interface DaoServices {
     @Query("SELECT * FROM sampledbdata")
-    suspend fun getAllSampleDbDatas(): List<SampleDbData>
+    suspend fun getAllSampleDbData(): List<SampleDbData>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSampleDbData(SampleDbData: SampleDbData): Long

@@ -1,6 +1,7 @@
 package com.example.androidmvptemplate.data.remote
 
 import com.example.androidmvptemplate.data.remote.model.SampleDTO
+import retrofit2.Response
 import retrofit2.http.GET
 
 interface ApiServices {
@@ -10,5 +11,5 @@ interface ApiServices {
     }
 
     @GET("sample_route/")
-    suspend fun getSampleData(): SampleDTO
+    suspend fun getSampleData(): Response<SampleDTO>
 }

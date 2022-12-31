@@ -34,6 +34,9 @@ android {
     buildFeatures {
         viewBinding true
     }
+    packagingOptions {
+        exclude 'META-INF/*'
+    }
 }
 
 dependencies {
@@ -62,7 +65,14 @@ dependencies {
     kapt 'com.google.dagger:hilt-compiler:2.38.1'
 
     //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+
+    //mockk
+    implementation 'io.mockk:mockk:1.13.3'
+
+    //test
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4'
+    implementation 'com.google.truth:truth:1.1.3'
 
 }

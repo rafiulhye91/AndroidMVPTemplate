@@ -3,6 +3,7 @@ package com.example.androidmvptemplate.data.local.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.androidmvptemplate.domain.model.SampleDomainData
 
 @Entity
 data class SampleDbData(
@@ -12,4 +13,10 @@ data class SampleDbData(
     val title: String?,
     @ColumnInfo(name = "details")
     val details: String?
-)
+) {
+    fun toSampleDomainData(): SampleDomainData {
+        return SampleDomainData(
+            name = this.title
+        )
+    }
+}

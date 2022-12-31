@@ -1,5 +1,8 @@
 package com.example.androidmvptemplate.domain.sample
 
-interface ISampleDomain {
+import com.example.androidmvptemplate.data.Resource
+import com.example.androidmvptemplate.domain.model.SampleDomainData
 
+interface ISampleDomain {
+    suspend fun getSampleData(): Resource<SampleDomainData>?
 }
