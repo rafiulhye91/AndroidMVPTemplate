@@ -13,14 +13,14 @@ class SampleDomain @Inject constructor(
     private val daoServices: DaoServices
 ) : BaseDomain(), ISampleDomain {
 
-    override suspend fun getSampleData(): Resource<SampleDomainData> {
+    override suspend fun getSampleData(): Resource<SampleDomainData?> {
         return handleApiResponse {
             val response = apiServices.getSampleData()
             ItemWrapper(response.body()?.toSampleDomainData(), response)
         }
     }
 
-    suspend fun getAllSampleData(): Resource<List<SampleDomainData>> {
+    override suspend fun getAllSampleData(): Resource<List<SampleDomainData?>> {
         return handleDbListResponse {
             daoServices.getAllSampleDbData().map { it.toSampleDomainData() }
         }

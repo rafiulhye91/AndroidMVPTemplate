@@ -11,5 +11,5 @@ interface ApiServices {
     }
 
     @GET("sample_route/")
-    suspend fun getSampleData(): Response<SampleDTO>
+    suspend fun getSampleData(): Response<SampleDTO?>
 }

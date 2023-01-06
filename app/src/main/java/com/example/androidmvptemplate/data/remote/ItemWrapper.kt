@@ -4,10 +4,10 @@ import retrofit2.Response
 
 data class ItemWrapper<T, DTO>(
     val data: T?,
-    val response: Response<DTO>?
+    val response: Response<DTO?>
 )
 
 data class ListItemWrapper<T, DTO>(
-    val data: List<T>? = null,
-    val response: Response<List<DTO>>? = null
+    val data: List<T?>,
+    val response: Response<List<DTO?>>
 )
