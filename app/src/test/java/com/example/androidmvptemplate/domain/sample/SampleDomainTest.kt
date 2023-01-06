@@ -72,5 +72,4 @@ class SampleDomainTest {
             val expected = Resource.Error<List<SampleDomainData>>(error = "Network Error!")
             assertThat(result.error).isEqualTo(expected.error)
         }
-
 }

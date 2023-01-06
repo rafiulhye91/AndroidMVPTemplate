@@ -1,7 +1,7 @@
 package com.example.androidmvptemplate.view.main
 
 import com.example.androidmvptemplate.base.BasePresenter
-import com.example.androidmvptemplate.service.SampleService
+import com.example.androidmvptemplate.service.sample.SampleService
 import javax.inject.Inject
 
 class MainPresenter @Inject constructor(
