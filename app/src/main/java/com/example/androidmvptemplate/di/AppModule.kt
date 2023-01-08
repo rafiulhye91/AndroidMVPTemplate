@@ -11,7 +11,7 @@ import com.example.androidmvptemplate.data.remote.ApiServices.Companion.BASE_URL
 import com.example.androidmvptemplate.data.remote.ApiServices.Companion.TIMEOUT
 import com.example.androidmvptemplate.domain.sample.ISampleDomain
 import com.example.androidmvptemplate.domain.sample.SampleDomain
-import com.example.androidmvptemplate.service.SampleService
+import com.example.androidmvptemplate.service.sample.SampleService
 import com.example.androidmvptemplate.view.main.IMainView
 import dagger.Module
 import dagger.Provides
