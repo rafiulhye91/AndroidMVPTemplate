@@ -2,9 +2,8 @@ package com.example.androidmvptemplate.base
 
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
-import javax.inject.Inject
 
-open class BasePresenter @Inject constructor(open val view: IBaseView) : IBasePresenter {
+abstract class BasePresenter(open val view: IBaseView) : IBasePresenter {
 
     val presenterScope: CoroutineScope
         get() = view.lifecycleScope

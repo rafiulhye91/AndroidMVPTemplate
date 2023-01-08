@@ -9,16 +9,19 @@ import com.example.androidmvptemplate.data.local.DaoServices
 import com.example.androidmvptemplate.data.remote.ApiServices
 import com.example.androidmvptemplate.data.remote.ApiServices.Companion.BASE_URL
 import com.example.androidmvptemplate.data.remote.ApiServices.Companion.TIMEOUT
+import com.example.androidmvptemplate.data.remote.AuthInterceptor
 import com.example.androidmvptemplate.domain.sample.ISampleDomain
 import com.example.androidmvptemplate.domain.sample.SampleDomain
 import com.example.androidmvptemplate.service.sample.SampleService
 import com.example.androidmvptemplate.view.main.IMainView
+import com.example.androidmvptemplate.view.sample.ISampleView
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
@@ -29,9 +32,28 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
+    //TODO: Find a way to securely save the API token and provide it from here
+    fun provideApiKey(): String = "Token"
+
+    @Provides
+    fun provideAuthInterceptor(apiKey: String): AuthInterceptor = AuthInterceptor(apiKey)
+
+    @Provides
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor {
+        val loggingInterceptor = HttpLoggingInterceptor()
+        loggingInterceptor.level = HttpLoggingInterceptor.Level.NONE
+        return loggingInterceptor
+    }
+
+    @Provides
     @Singleton
-    fun provideApiServices(): ApiServices {
+    fun provideApiServices(
+        authInterceptor: AuthInterceptor,
+        loggingInterceptor: HttpLoggingInterceptor
+    ): ApiServices {
         val client = OkHttpClient.Builder()
+            .addInterceptor(authInterceptor)
+            .addInterceptor(loggingInterceptor)
             .callTimeout(TIMEOUT, TimeUnit.SECONDS)
             .build()
         return Retrofit.Builder()
@@ -75,4 +97,10 @@ object ViewModule {
     fun provideIMainView(activity: Activity): IMainView {
         return activity as IMainView
     }
+
+    @Provides
+    fun provideISampleView(activity: Activity): ISampleView {
+        return activity as ISampleView
+    }
+
 }

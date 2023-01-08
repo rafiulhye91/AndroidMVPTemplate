@@ -4,36 +4,47 @@ import com.example.androidmvptemplate.data.Resource
 import com.example.androidmvptemplate.data.local.DaoServices
 import com.example.androidmvptemplate.data.remote.ApiServices
 import com.example.androidmvptemplate.data.remote.model.SampleDTO
+import com.example.androidmvptemplate.data.remote.util.PageNotFoundException
+import com.example.androidmvptemplate.data.remote.util.UnauthorizedException
 import com.example.androidmvptemplate.domain.generateMockErrorResponseBody
 import com.example.androidmvptemplate.domain.model.SampleDomainData
-import com.example.androidmvptemplate.domain.util.NotFoundException
-import com.example.androidmvptemplate.domain.util.UnauthorizedException
 import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 import retrofit2.HttpException
 import retrofit2.Response
 
 class SampleDomainTest {
-    private val apiServices: ApiServices = mockk(relaxed = true)
-    private val daoServices: DaoServices = mockk(relaxed = true)
-    private val sampleDomain: SampleDomain = SampleDomain(apiServices, daoServices)
+
+    private lateinit var apiServices: ApiServices
+    private lateinit var daoServices: DaoServices
+    private lateinit var domain: SampleDomain
+
+    @Before
+    fun setup() {
+        apiServices = mockk(relaxed = true)
+        daoServices = mockk(relaxed = true)
+        domain = SampleDomain(apiServices, daoServices)
+    }
 
     @Test
     fun `When getSampleData is called from network, Then ApiServices calls the getSampleData`() =
         runTest {
             coEvery { apiServices.getSampleData() } returns Response.success(null)
-            sampleDomain.getSampleData()
+            domain.getSampleData()
             coVerify { apiServices.getSampleData() }
         }
 
     @Test
     fun `When getAllSampleData is called from db, the DaoServices calls the getAllSampleData`() =
         runTest {
-            sampleDomain.getAllSampleData()
+            domain.getAllSampleData()
             coVerify { daoServices.getAllSampleDbData() }
         }
 
@@ -45,7 +56,7 @@ class SampleDomainTest {
                     generateMockErrorResponseBody()
                 )
             )
-            val result = sampleDomain.getSampleData()
+            val result = domain.getSampleData()
             val expected = Resource.Error<List<SampleDomainData>>(error = "User is unauthorized!")
             assertThat(result.error).isEqualTo(expected.error)
         }
@@ -54,11 +65,11 @@ class SampleDomainTest {
     fun `Given API call returns a NotFoundException exception, When getEvents is called, return the page not found error`() =
         runTest {
             coEvery { apiServices.getSampleData() }.throws(
-                NotFoundException(
+                PageNotFoundException(
                     generateMockErrorResponseBody()
                 )
             )
-            val result = sampleDomain.getSampleData()
+            val result = domain.getSampleData()
             val expected = Resource.Error<List<SampleDomainData>>(error = "Page Not Found!")
             assertThat(result.error).isEqualTo(expected.error)
         }
@@ -68,8 +79,22 @@ class SampleDomainTest {
         runTest {
             val response = Response.error<List<SampleDTO>>(500, generateMockErrorResponseBody())
             coEvery { apiServices.getSampleData() }.throws(HttpException(response))
-            val result = sampleDomain.getSampleData()
+            val result = domain.getSampleData()
             val expected = Resource.Error<List<SampleDomainData>>(error = "Network Error!")
             assertThat(result.error).isEqualTo(expected.error)
         }
+
+    @Test
+    fun `Given API call is successful but data is null, When getEvents is called, return No Data Found error`() =
+        runTest {
+            coEvery { apiServices.getSampleData() } returns Response.success(null)
+            val result = domain.getSampleData()
+            val expected = Resource.Error<List<SampleDomainData>>(error = "No Data found!")
+            assertThat(result.data).isEqualTo(expected.data)
+        }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
 }

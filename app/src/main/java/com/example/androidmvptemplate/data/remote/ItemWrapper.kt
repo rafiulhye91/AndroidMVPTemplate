@@ -2,12 +2,12 @@ package com.example.androidmvptemplate.data
 
 import retrofit2.Response
 
-data class ItemWrapper<T, DTO>(
+data class ItemWrapper<T, V>(
     val data: T?,
-    val response: Response<DTO?>
+    val response: Response<V?>
 )
 
-data class ListItemWrapper<T, DTO>(
-    val data: List<T?>,
-    val response: Response<List<DTO?>>
+data class ListItemWrapper<T, V>(
+    val data: List<T?>?,
+    val response: Response<V?>
 )
