@@ -21,7 +21,7 @@ class SampleDomain @Inject constructor(
     }
 
     override suspend fun getAllSampleData(): Resource<List<SampleDomainData?>> {
-        return handleDbListResponse {
+        return handleDbResponse {
             daoServices.getAllSampleDbData().map { it.toSampleDomainData() }
         }
     }
