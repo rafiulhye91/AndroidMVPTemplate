@@ -9,6 +9,7 @@ import com.example.androidmvptemplate.data.util.handleException
 import com.example.androidmvptemplate.data.util.handleHTTPError
 
 abstract class BaseDomain {
+
     inline fun <T, DTO> handleApiResponse(func: () -> ItemWrapper<T, DTO>): Resource<T> {
         try {
             val item = func()
@@ -24,7 +25,6 @@ abstract class BaseDomain {
         }
         return Resource.Error(error = UNKNOWN_ERROR.message)
     }
-
 
     inline fun <T, DTO> handleApiListResponse(func: () -> ListItemWrapper<T, DTO>): Resource<List<T>> {
         try {

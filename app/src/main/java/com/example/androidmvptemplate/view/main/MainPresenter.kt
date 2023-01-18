@@ -8,6 +8,6 @@ class MainPresenter @Inject constructor(
 ) : BasePresenter(view) {
 
     override fun start() {
-        view.setWelcomeText("Hello World from Android MVP Template!!")
+        view.startSampleActivity()
     }
 }

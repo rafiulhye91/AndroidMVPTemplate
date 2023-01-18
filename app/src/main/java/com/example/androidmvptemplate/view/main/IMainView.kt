@@ -4,4 +4,5 @@ import com.example.androidmvptemplate.base.IBaseView
 
 interface IMainView : IBaseView {
     fun setWelcomeText(string: String?)
+    fun startSampleActivity()
 }
