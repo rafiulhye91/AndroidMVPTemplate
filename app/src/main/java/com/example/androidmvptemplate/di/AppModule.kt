@@ -3,6 +3,7 @@ package com.example.androidmvptemplate.di
 import android.app.Activity
 import android.app.Application
 import androidx.room.Room
+import com.example.androidmvptemplate.BuildConfig
 import com.example.androidmvptemplate.data.local.AppDatabase
 import com.example.androidmvptemplate.data.local.AppDatabase.Companion.DATABASE_NAME
 import com.example.androidmvptemplate.data.local.DaoServices
@@ -12,6 +13,8 @@ import com.example.androidmvptemplate.data.remote.ApiServices.Companion.TIMEOUT
 import com.example.androidmvptemplate.data.remote.AuthInterceptor
 import com.example.androidmvptemplate.domain.sample.ISampleDomain
 import com.example.androidmvptemplate.domain.sample.SampleDomain
+import com.example.androidmvptemplate.mock.MockApiServices
+import com.example.androidmvptemplate.service.sample.ISampleService
 import com.example.androidmvptemplate.service.sample.SampleService
 import com.example.androidmvptemplate.view.main.IMainView
 import com.example.androidmvptemplate.view.sample.ISampleView
@@ -25,6 +28,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -49,20 +53,30 @@ object AppModule {
     @Singleton
     fun provideApiServices(
         authInterceptor: AuthInterceptor,
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        app: Application,
+        @Named("useMockApi") useMockApi: Boolean
     ): ApiServices {
-        val client = OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .callTimeout(TIMEOUT, TimeUnit.SECONDS)
-            .build()
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
-            .create(ApiServices::class.java)
+        return if (useMockApi) {
+            MockApiServices(app)
+        } else {
+            val client = OkHttpClient.Builder()
+                .addInterceptor(authInterceptor)
+                .addInterceptor(loggingInterceptor)
+                .callTimeout(TIMEOUT, TimeUnit.SECONDS)
+                .build()
+            Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
+                .create(ApiServices::class.java)
+        }
     }
+
+    @Provides
+    @Named("useMockApi")
+    fun provideUseMockApi(): Boolean = BuildConfig.USE_MOCK_API
 
     @Provides
     @Singleton
@@ -84,7 +98,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideSampleService(domain: ISampleDomain): SampleService {
+    fun provideSampleService(domain: ISampleDomain): ISampleService {
         return SampleService(domain)
     }
 }
