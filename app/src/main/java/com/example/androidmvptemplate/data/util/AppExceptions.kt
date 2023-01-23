@@ -12,6 +12,11 @@ import java.net.HttpURLConnection.*
 
 private const val TAG = "AppExceptions"
 
+/**
+ *
+ * Enumeration class that holds the different types of errors that can occur in the application.
+ * Each error type is associated with a message that will be displayed to the user.
+ */
 enum class ErrorType(val message: String) {
     UNKNOWN_ERROR("Unknown Error!"),
     NETWORK_ERROR("Network Error!"),
@@ -25,6 +30,11 @@ enum class ErrorType(val message: String) {
     DB_CONSTRAINT_ERROR("DB constraint is violated!")
 }
 
+/**
+ *
+ * Sealed class that represents different types of exceptions that can occur in the application.
+ * Each exception type corresponds to a specific error that can happen.
+ */
 sealed class AppExceptions : Exception() {
     class UnauthorizedException : AppExceptions()
     class PageNotFoundException : AppExceptions()
@@ -35,6 +45,12 @@ sealed class AppExceptions : Exception() {
     class InternalServerErrorException : AppExceptions()
 }
 
+/**
+ *
+ * handleHTTPError function is used to handle HTTP errors that occur in the network layer of the app.
+ * It takes a retrofit Response object as a parameter and maps it to the corresponding exception.
+ * If the response code is not found in the errorMap, it throws a HttpException with the given response.
+ */
 fun <T> handleHTTPError(response: Response<T>) {
     val errorMap: Map<Int, Exception> = mapOf(
         HTTP_UNAUTHORIZED to UnauthorizedException(),
@@ -47,6 +63,13 @@ fun <T> handleHTTPError(response: Response<T>) {
     throw exception
 }
 
+/**
+ *
+ * handleException function is used to handle various types of exceptions that can occur in the app.
+ * It takes an exception object as a parameter and maps it to the corresponding error type.
+ * It returns a Resource.Error object with the error message of the error type.
+ * It also logs the localized message of the exception.
+ */
 fun <T> handleException(e: Exception): Resource<T> {
     val errorMap: Map<Class<out Exception>, ErrorType> = mapOf(
         UnauthorizedException::class.java to UNAUTHORIZED_ERROR,
@@ -64,4 +87,3 @@ fun <T> handleException(e: Exception): Resource<T> {
     Log.e(TAG, e.localizedMessage)
     return Resource.Error<T>(error = error.message)
 }
-

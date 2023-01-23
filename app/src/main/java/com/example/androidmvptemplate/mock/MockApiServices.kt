@@ -7,6 +7,9 @@ import com.example.androidmvptemplate.data.remote.model.SampleDTO
 import com.example.androidmvptemplate.data.remote.model.SampleErrorDTO
 import com.example.androidmvptemplate.util.TAG
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okio.IOException
@@ -23,12 +26,15 @@ class MockApiServices @Inject constructor(private val app: Application) :
     }
 }
 
-private inline fun <reified T> Application.generateMockResponse(
+private const val MOCK_RESPONSE_DELAY: Long = 2000L
+
+private suspend inline fun <reified T> Application.generateMockResponse(
     fileName: String,
     errorFileName: String? = null
 ): Response<T> {
     val jsonString = getJsonString(fileName)
         ?: throw IllegalArgumentException("File not found: $fileName")
+    withContext(Dispatchers.IO) { delay(MOCK_RESPONSE_DELAY) }
     if (!errorFileName.isNullOrEmpty()) {
         return generateErrorResponse(errorFileName)
     }

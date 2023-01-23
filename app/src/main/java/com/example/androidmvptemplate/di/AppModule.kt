@@ -31,6 +31,22 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
+/**
+ *
+ * AppModule is a Dagger2 module that provides objects and dependencies
+ * that are used throughout the application. These dependencies are scoped
+ * to the entire application's lifecycle.
+ *
+ * @property apiKey the API key used for authentication with the API
+ * @property authInterceptor an interceptor that adds the API key to requests
+ * @property loggingInterceptor an interceptor that logs requests and responses
+ * @property apiServices the API services used to make network requests
+ * @property useMockApi a boolean value indicating whether to use mock API services or not
+ * @property database the app's database instance
+ * @property daoServices the Data Access Object services for the app's database
+ */
+
+
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -103,6 +119,11 @@ object AppModule {
     }
 }
 
+/**
+ *
+ * ViewModule is a Dagger2 module that provides objects and dependencies
+ * that are scoped to the lifecycle of an Activity.
+ */
 @InstallIn(ActivityComponent::class)
 @Module
 object ViewModule {
