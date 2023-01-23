@@ -19,14 +19,6 @@ class SampleActivity : BaseActivity(), ISampleView {
         presenter.start()
     }
 
-    override fun showProgress() {
-        //TODO("Not yet implemented")
-    }
-
-    override fun hideProgress() {
-        //TODO("Not yet implemented")
-    }
-
     override fun setSampleData(data: SampleDomainData?) {
         data?.name?.let { Log.d(TAG(), it) } ?: Log.d(TAG(), "Empty data")
     }

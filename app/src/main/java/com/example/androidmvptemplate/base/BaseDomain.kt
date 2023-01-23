@@ -8,8 +8,21 @@ import com.example.androidmvptemplate.data.util.ErrorType.UNKNOWN_ERROR
 import com.example.androidmvptemplate.data.util.handleException
 import com.example.androidmvptemplate.data.util.handleHTTPError
 
-abstract class BaseDomain {
+/**
+ *
+ * Abstract class that provides a set of functions to handle different types of responses (API, DB, etc.).
+ *
+ * @author [Rafiul Hye]
+ * @since [Current date or version]
+ */
 
+abstract class BaseDomain {
+    /**
+     *
+     * Handles the response of an API call that returns a single item.
+     * @param func A function that returns an [ItemWrapper] object.
+     * @return A [Resource] object that can be either a success or an error.
+     */
     inline fun <T, DTO> handleApiResponse(func: () -> ItemWrapper<T, DTO>): Resource<T> {
         try {
             val item = func()
@@ -26,6 +39,12 @@ abstract class BaseDomain {
         return Resource.Error(error = UNKNOWN_ERROR.message)
     }
 
+    /**
+     *
+     * Handles the response of an API call that returns a list of items.
+     * @param func A function that returns a [ListItemWrapper] object.
+     * @return A [Resource] object that can be either a success or an error.
+     */
     inline fun <T, DTO> handleApiListResponse(func: () -> ListItemWrapper<T, DTO>): Resource<List<T>> {
         try {
             val item = func()
@@ -42,6 +61,12 @@ abstract class BaseDomain {
         return Resource.Error(error = UNKNOWN_ERROR.message)
     }
 
+    /**
+     *
+     * Handles the response of a DB query.
+     * @param func A function that returns a single item from the DB.
+     * @return A [Resource] object that can be either a success or an error.
+     */
     inline fun <T> handleDbResponse(func: () -> T?): Resource<T> {
         return try {
             val data = func() ?: throw NoDataException()
