@@ -7,12 +7,22 @@ import com.google.common.truth.Truth.assertThat
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
 
 class SampleServiceTest {
-    private val domain: ISampleDomain = mockk(relaxed = true)
-    private val service: SampleService = SampleService(domain)
+
+    private lateinit var domain: ISampleDomain
+    private lateinit var service: SampleService
+
+    @Before
+    fun setup() {
+        domain = mockk(relaxed = true)
+        service = SampleService(domain)
+    }
 
     @Test
     fun `When getSampleData is called, Then domain also calls the getSampleData`() = runTest {
@@ -21,52 +31,49 @@ class SampleServiceTest {
     }
 
     @Test
-    fun `When getAllEvents is called, Then domain also calls the getAllEvents`() = runTest {
+    fun `When getAllSampleData is called, Then domain also calls the getAllSampleData`() = runTest {
         service.getAllSampleData()
         coVerify { domain.getAllSampleData() }
     }
 
     @Test
-    fun `When getSampleData is called, Given the getSampleData call from the domain returns a network error, Then the service returns a network error`() =
+    fun `When getSampleData is called, Given the getSampleData call from the domain is a Success but data is null, Then the service returns the null data`() =
         runTest {
-            val expected = Resource.Error<SampleDomainData?>(error = "Network Error!")
+            val expected = Resource.Success<SampleDomainData?>(null)
             coEvery { domain.getSampleData() } returns expected
-
             val result = service.getSampleData()
-
-            assertThat(result.error).isEqualTo(expected.error)
+            assertThat(result).isEqualTo(expected)
         }
 
     @Test
-    fun `When getSampleData is called, Given the getSampleData call from the domain returns a unauthorized error, Then the service returns a unauthorized error`() =
+    fun `When getAllSampleData is called, Given the getAllSampleData call from the domain is a Success but data is null, Then the service returns the null data`() =
         runTest {
-            val expected = Resource.Error<SampleDomainData?>(error = "User is unauthorized!")
-            coEvery { domain.getSampleData() } returns expected
-
-            val result = service.getSampleData()
-
-            assertThat(result.error).isEqualTo(expected.error)
+            val expected = Resource.Success<List<SampleDomainData?>>(null)
+            coEvery { domain.getAllSampleData() } returns expected
+            val result = service.getAllSampleData()
+            assertThat(result).isEqualTo(expected)
         }
 
     @Test
-    fun `When getSampleData is called, Given the getSampleData call from the domain returns a not-found error, Then the service returns a not-found error`() =
+    fun `When getAllSampleData is called, Given the getAllSampleData call from the domain is a Success but returns an empty list, Then the service returns the empty list`() =
         runTest {
-            val expected = Resource.Error<SampleDomainData?>(error = "Page Not Found!")
-            coEvery { domain.getSampleData() } returns expected
-
-            val result = service.getSampleData()
-
-            assertThat(result.error).isEqualTo(expected.error)
+            val expected = Resource.Success<List<SampleDomainData?>>(emptyList())
+            coEvery { domain.getAllSampleData() } returns expected
+            val result = service.getAllSampleData()
+            assertThat(result).isEqualTo(expected)
         }
 
     @Test
-    fun `When getSampleData is called, Given the getSampleData call from the domain returns an unknown error, Then the service returns an unknown error`() =
+    fun `When getSampleData is called, Given the getSampleData call from the domain returns an error, Then the service returns the same error`() =
         runTest {
-            val expected = Resource.Error<SampleDomainData?>(error = "Unknown Error!")
+            val expected = Resource.Error<SampleDomainData?>(error = "Something bad happened!")
             coEvery { domain.getSampleData() } returns expected
-
             val result = service.getSampleData()
-
             assertThat(result.error).isEqualTo(expected.error)
         }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
+    }
 }
